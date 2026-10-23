@@ -3,186 +3,480 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Case Study: Sales Analytics & Conversion Dashboard | Sapam Dayananda Singh</title>
+    <title>Cyclistic Bike-Share | Executive BI Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        member: '#0284c7', // Primary Blue
+                        casual: '#38bdf8', // Cyan/Light Blue
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --success-color: #4ade80;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        a.back-btn {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        a.back-btn:hover {
-            text-decoration: underline;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin: 25px 0;
-        }
-
-        .meta-item h4 {
-            margin: 0 0 5px 0;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        .meta-item p {
-            margin: 0;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .visual-container {
-            margin: 30px 0;
-        }
-
-        .section-block {
-            margin-bottom: 35px;
-        }
-
-        .section-block h2 {
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            font-size: 1.4rem;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
-        .highlight-box {
-            background-color: rgba(56, 189, 248, 0.1);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px 20px;
-            border-radius: 0 8px 8px 0;
-            margin: 20px 0;
-        }
-
-        footer {
-            margin-top: 60px;
-            text-align: center;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .print-card { border: 1px solid #cbd5e1 !important; box-shadow: none !important; page-break-inside: avoid; }
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <div class="container">
-        <a href="index.html" class="back-btn">← Back to Portfolio</a>
-        
-        <header>
-            <h1>E-Commerce Sales Analytics & Conversion Dashboard</h1>
-            <p>Consolidating multi-channel sales data into actionable dashboard insights to reduce drop-offs and optimize ad spend.</p>
-        </header>
+    <!-- Top Navigation Header -->
+    <header class="bg-navy-900 border-b border-slate-800 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-sky-500/10 rounded-lg text-sky-400 border border-sky-500/20">
+                    <i data-lucide="bike" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white leading-tight">Cyclistic Bike-Share</h1>
+                    <p class="text-xs text-slate-400">Executive BI Analysis & Dashboard (Jan – May 2025)</p>
+                </div>
+            </div>
 
-        <div class="meta-grid">
-            <div class="meta-item">
-                <h4>Role</h4>
-                <p>E-Commerce & Data Analyst</p>
-            </div>
-            <div class="meta-item">
-                <h4>Tools Used</h4>
-                <p>GA4, Power BI, Advanced Excel</p>
-            </div>
-            <div class="meta-item">
-                <h4>Core Focus</h4>
-                <p>Funnel Optimization & ROAS</p>
-            </div>
-            <div class="meta-item">
-                <h4>Key Result</h4>
-                <p style="color: var(--success-color);">+22% Conversion Rate</p>
+            <div class="flex items-center space-x-3">
+                <button onclick="exportDataCSV()" class="flex items-center space-x-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md transition">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Export CSV</span>
+                </button>
+                <button onclick="window.print()" class="flex items-center space-x-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md transition">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>Print Report</span>
+                </button>
             </div>
         </div>
+    </header>
 
-        <!-- DASHBOARD GRAPHIC SVG -->
-        <div class="visual-container">
-            <!-- Paste the SVG snippet provided above right here -->
-        </div>
+    <!-- Main Dashboard Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <div class="section-block">
-            <h2>1. The Problem</h2>
-            <p>The client was running advertising campaigns across multiple platforms (Google Ads, Meta, Amazon PPC) but suffered from fragmented performance reporting. While web traffic was steady, sales conversions were declining, and team members were unable to identify where potential customers were abandoning their buyer journey.</p>
-        </div>
+        <!-- Filter Controls Bar -->
+        <section class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-lg backdrop-blur no-print">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-2 text-sky-400 font-semibold text-sm">
+                    <i data-lucide="filter" class="w-4 h-4"></i>
+                    <span>Interactive Filters:</span>
+                </div>
 
-        <div class="section-block">
-            <h2>2. Analytical Approach & Implementation</h2>
-            <ul>
-                <li><strong>Data Aggregation:</strong> Extracted raw transactional data from Shopify, Amazon Central, and Google Analytics 4 (GA4) into Advanced Excel and Power BI data models.</li>
-                <li><strong>Funnel Analysis:</strong> Mapped out the step-by-step conversion pipeline (Sessions → Product Views → Cart Adds → Checkout → Purchase) to isolate friction points.</li>
-                <li><strong>SKU & Channel Segmentation:</strong> Categorized top-performing products vs. low-converting landing pages to reallocate advertising budgets effectively.</li>
-            </ul>
-        </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 md:max-w-2xl">
+                    <!-- Rider Type Filter -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Rider Segment</label>
+                        <select id="riderFilter" onchange="updateDashboard()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+                            <option value="all">All Riders (Combined)</option>
+                            <option value="member">Annual Members Only</option>
+                            <option value="casual">Casual Riders Only</option>
+                        </select>
+                    </div>
 
-        <div class="section-block">
-            <h2>3. Key Insights Discovered</h2>
-            <div class="highlight-box">
-                <strong>Friction Point Identified:</strong> High mobile drop-off between "Add to Cart" and "Checkout Initialization" due to slow script loading times on high-traffic mobile landing pages.
+                    <!-- Month Filter -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Time Period</label>
+                        <select id="monthFilter" onchange="updateDashboard()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+                            <option value="all">All Months (Jan – May)</option>
+                            <option value="Jan">January 2025</option>
+                            <option value="Feb">February 2025</option>
+                            <option value="Mar">March 2025</option>
+                            <option value="Apr">April 2025</option>
+                            <option value="May">May 2025</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <div class="flex items-end">
+                        <button onclick="resetFilters()" class="w-full px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded-lg transition">
+                            Reset Filters
+                        </button>
+                    </div>
+                </div>
             </div>
-            <ul>
-                <li><strong>Wasted Ad Spend:</strong> 25% of ad budget was driving traffic to two low-inventory SKUs with below-average conversion rates (< 1%).</li>
-                <li><strong>Peak Buying Hours:</strong> Converted orders peaked consistently between 7 PM - 10 PM, whereas PPC ad budgets were exhausting by midday.</li>
-            </ul>
+        </section>
+
+        <!-- KPI Summary Cards -->
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <!-- Total Trips -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Trips</div>
+                <div id="kpiTotalTrips" class="text-2xl font-extrabold text-white mt-1">1,462,521</div>
+                <div id="kpiTotalSub" class="text-xs text-sky-400 mt-1 flex items-center gap-1">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i> 100% Volume
+                </div>
+                <div class="absolute right-3 top-3 text-slate-600/30"><i data-lucide="activity" class="w-8 h-8"></i></div>
+            </div>
+
+            <!-- Member Trips -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 border-l-4 border-l-sky-500 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Member Trips</div>
+                <div id="kpiMemberTrips" class="text-2xl font-extrabold text-white mt-1">1,032,892</div>
+                <div id="kpiMemberShare" class="text-xs text-sky-400 mt-1">70.6% Market Share</div>
+                <div class="absolute right-3 top-3 text-sky-500/20"><i data-lucide="user-check" class="w-8 h-8"></i></div>
+            </div>
+
+            <!-- Casual Trips -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 border-l-4 border-l-cyan-400 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Casual Trips</div>
+                <div id="kpiCasualTrips" class="text-2xl font-extrabold text-white mt-1">429,629</div>
+                <div id="kpiCasualShare" class="text-xs text-cyan-400 mt-1">29.4% Market Share</div>
+                <div class="absolute right-3 top-3 text-cyan-400/20"><i data-lucide="users" class="w-8 h-8"></i></div>
+            </div>
+
+            <!-- Casual Duration -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Casual Avg Duration</div>
+                <div id="kpiCasualDuration" class="text-2xl font-extrabold text-cyan-300 mt-1">21.5 <span class="text-xs font-normal">mins</span></div>
+                <div class="text-xs text-slate-400 mt-1">Leisure & Tourism</div>
+                <div class="absolute right-3 top-3 text-slate-600/30"><i data-lucide="clock" class="w-8 h-8"></i></div>
+            </div>
+
+            <!-- Member Duration -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Member Avg Duration</div>
+                <div id="kpiMemberDuration" class="text-2xl font-extrabold text-sky-400 mt-1">11.3 <span class="text-xs font-normal">mins</span></div>
+                <div class="text-xs text-slate-400 mt-1">Routine Commuting</div>
+                <div class="absolute right-3 top-3 text-slate-600/30"><i data-lucide="timer" class="w-8 h-8"></i></div>
+            </div>
+        </section>
+
+        <!-- Main Analytics Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Chart 1: Donut (Rider Share) -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 shadow-sm flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-4 h-4 text-sky-400"></i> Segment Volume Share
+                    </h3>
+                    <span class="text-xs text-slate-400">Total Rides</span>
+                </div>
+                <div class="relative flex-1 min-h-[220px] flex items-center justify-center">
+                    <canvas id="donutChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Line Progression (Monthly Trend) -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 shadow-sm lg:col-span-2 flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="line-chart" class="w-4 h-4 text-sky-400"></i> Monthly Progression (Jan – May 2025)
+                    </h3>
+                    <span class="text-xs text-emerald-400 font-semibold">+650% Casual Surge</span>
+                </div>
+                <div class="relative flex-1 min-h-[220px]">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 3: Clustered Bar (Weekday Trips) -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 shadow-sm lg:col-span-2 flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-sky-400"></i> Daily Rides by Weekday
+                    </h3>
+                    <span class="text-xs text-slate-400">Weekend vs. Commute</span>
+                </div>
+                <div class="relative flex-1 min-h-[240px]">
+                    <canvas id="weekdayChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 4: Hourly Profile -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 shadow-sm flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="clock" class="w-4 h-4 text-sky-400"></i> 24-Hour Commute Curve
+                    </h3>
+                    <span class="text-xs text-sky-400">Peaks: 8 AM & 5 PM</span>
+                </div>
+                <div class="relative flex-1 min-h-[240px]">
+                    <canvas id="hourlyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 5: Top 10 Stations with Segment Toggle -->
+            <div class="print-card bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 shadow-sm lg:col-span-3 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-sky-400"></i> Top 10 Starting Stations
+                        </h3>
+                        <p class="text-xs text-slate-400">Geographic hotspot concentration</p>
+                    </div>
+
+                    <!-- Station Tab Buttons -->
+                    <div class="flex bg-slate-900 p-1 rounded-lg border border-slate-700 text-xs self-start sm:self-auto">
+                        <button id="btnCasualStations" onclick="switchStationTab('casual')" class="px-3 py-1 rounded-md transition font-medium text-slate-300 hover:text-white">
+                            Casual Hotspots
+                        </button>
+                        <button id="btnMemberStations" onclick="switchStationTab('member')" class="px-3 py-1 rounded-md transition font-medium text-slate-300 hover:text-white">
+                            Member Commuting Hubs
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative flex-1 min-h-[300px]">
+                    <canvas id="stationChart"></canvas>
+                </div>
+            </div>
+
         </div>
+    </main>
 
-        <div class="section-block">
-            <h2>4. Business Results & Impact</h2>
-            <ul>
-                <li><strong style="color: var(--success-color);">+22% Increase in Conversion Rate:</strong> Implemented checkout stream fixes based on funnel drop-off findings.</li>
-                <li><strong style="color: var(--success-color);">15% PPC Cost Savings:</strong> Shifted budget schedules to peak buying hours and away from low-converting SKUs.</li>
-                <li><strong>Automated Reporting:</strong> Replaced 5+ hours of manual weekly Excel reporting with a single auto-refreshing Power BI dashboard view.</li>
-            </ul>
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-slate-800 py-4 mt-8 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            Cyclistic Bike-Share Case Study Analytics • Built with Chart.js & Tailwind CSS
         </div>
+    </footer>
 
-        <footer>
-            <p>© 2026 Sapam Dayananda Singh • E-Commerce & Data Analytics Specialist</p>
-        </footer>
-    </div>
+    <!-- Dashboard Logic & Data Script -->
+    <script>
+        // Data Set derived from BigQuery analysis
+        const rawData = {
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            memberMonthly: [114527, 124144, 212268, 262137, 319800],
+            casualMonthly: [24124, 27757, 85862, 109239, 182610],
+            
+            weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            memberWeekday: [98330, 148091, 165187, 155176, 172817, 161338, 131953],
+            casualWeekday: [59490, 51736, 50116, 45867, 56252, 76896, 89272],
+            
+            hours: ['12AM','2AM','4AM','6AM','8AM','10AM','12PM','2PM','3PM','4PM','5PM','6PM','8PM','10PM'],
+            memberHourly: [8500, 3200, 4800, 32000, 77182, 41000, 48000, 46000, 62000, 89000, 112776, 84000, 41000, 22000],
+            casualHourly: [4200, 1800, 1900, 9200, 21000, 24000, 31000, 36000, 39000, 41000, 43247, 38000, 21000, 11000],
 
+            casualStations: [
+                { name: 'Streeter Dr & Grand Ave', trips: 8467 },
+                { name: 'DuSable Lake Shore Dr & Monroe St', trips: 6723 },
+                { name: 'Millennium Park', trips: 4120 },
+                { name: 'Shedd Aquarium', trips: 4081 },
+                { name: 'Michigan Ave & Oak St', trips: 3716 },
+                { name: 'DuSable Harbor', trips: 3662 },
+                { name: 'DuSable Lake Shore Dr & North Blvd', trips: 3014 },
+                { name: 'Kingsbury St & Kinzie St', trips: 2580 },
+                { name: 'Theater on the Lake', trips: 2424 },
+                { name: 'Indiana Ave & Roosevelt Rd', trips: 2293 }
+            ],
+
+            memberStations: [
+                { name: 'Kingsbury St & Kinzie St', trips: 10841 },
+                { name: 'Clinton St & Washington Blvd', trips: 8640 },
+                { name: 'University Ave & 57th St', trips: 7643 },
+                { name: 'Canal St & Madison St', trips: 7574 },
+                { name: 'Clinton St & Madison St', trips: 7520 },
+                { name: 'Clark St & Elm St', trips: 6901 },
+                { name: 'Ellis Ave & 60th St', trips: 6839 },
+                { name: 'Clinton St & Jackson Blvd', trips: 6305 },
+                { name: 'Canal St & Adams St', trips: 5854 },
+                { name: 'State St & Chicago Ave', trips: 5837 }
+            ]
+        };
+
+        let charts = {};
+        let activeStationSegment = 'casual';
+
+        // Chart.js Default Settings
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter';
+
+        window.onload = function() {
+            lucide.createIcons();
+            initCharts();
+            updateDashboard();
+        };
+
+        function initCharts() {
+            // Donut Chart
+            charts.donut = new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Annual Members', 'Casual Riders'],
+                    datasets: [{
+                        data: [1032892, 429629],
+                        backgroundColor: ['#0284c7', '#38bdf8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '70%'
+                }
+            });
+
+            // Monthly Chart
+            charts.monthly = new Chart(document.getElementById('monthlyChart'), {
+                type: 'line',
+                data: {
+                    labels: rawData.months,
+                    datasets: [
+                        { label: 'Member Trips', data: rawData.memberMonthly, borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.1)', fill: true, tension: 0.3 },
+                        { label: 'Casual Trips', data: rawData.casualMonthly, borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Weekday Chart
+            charts.weekday = new Chart(document.getElementById('weekdayChart'), {
+                type: 'bar',
+                data: {
+                    labels: rawData.weekdays,
+                    datasets: [
+                        { label: 'Member Trips', data: rawData.memberWeekday, backgroundColor: '#0284c7', borderRadius: 4 },
+                        { label: 'Casual Trips', data: rawData.casualWeekday, backgroundColor: '#38bdf8', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Hourly Chart
+            charts.hourly = new Chart(document.getElementById('hourlyChart'), {
+                type: 'line',
+                data: {
+                    labels: rawData.hours,
+                    datasets: [
+                        { label: 'Member', data: rawData.memberHourly, borderColor: '#0284c7', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                        { label: 'Casual', data: rawData.casualHourly, borderColor: '#38bdf8', borderWidth: 2, pointRadius: 2, tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Station Chart
+            charts.station = new Chart(document.getElementById('stationChart'), {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{ label: 'Trips', data: [], backgroundColor: '#38bdf8', borderRadius: 4 }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { grid: { color: '#334155' } }, y: { grid: { display: false } } }
+                }
+            });
+
+            updateStationChart();
+        }
+
+        function updateDashboard() {
+            const rider = document.getElementById('riderFilter').value;
+            const month = document.getElementById('monthFilter').value;
+
+            // Recalculate metrics
+            let mTotal = 1032892;
+            let cTotal = 429629;
+
+            if (month !== 'all') {
+                const monthIdx = rawData.months.indexOf(month);
+                mTotal = rawData.memberMonthly[monthIdx];
+                cTotal = rawData.casualMonthly[monthIdx];
+            }
+
+            let displayMember = (rider === 'all' || rider === 'member') ? mTotal : 0;
+            let displayCasual = (rider === 'all' || rider === 'casual') ? cTotal : 0;
+            let combined = displayMember + displayCasual;
+
+            // Update KPIs
+            document.getElementById('kpiTotalTrips').innerText = combined.toLocaleString();
+            document.getElementById('kpiMemberTrips').innerText = displayMember.toLocaleString();
+            document.getElementById('kpiCasualTrips').innerText = displayCasual.toLocaleString();
+
+            let mShare = combined > 0 ? ((displayMember / combined) * 100).toFixed(1) : 0;
+            let cShare = combined > 0 ? ((displayCasual / combined) * 100).toFixed(1) : 0;
+
+            document.getElementById('kpiMemberShare').innerText = `${mShare}% Market Share`;
+            document.getElementById('kpiCasualShare').innerText = `${cShare}% Market Share`;
+
+            // Update Donut Chart Visibility
+            charts.donut.data.datasets[0].data = [displayMember, displayCasual];
+            charts.donut.update();
+        }
+
+        function switchStationTab(segment) {
+            activeStationSegment = segment;
+            updateStationChart();
+        }
+
+        function updateStationChart() {
+            const btnCasual = document.getElementById('btnCasualStations');
+            const btnMember = document.getElementById('btnMemberStations');
+
+            if (activeStationSegment === 'casual') {
+                btnCasual.className = 'px-3 py-1 rounded-md transition font-medium bg-cyan-500 text-slate-900 font-bold';
+                btnMember.className = 'px-3 py-1 rounded-md transition font-medium text-slate-400 hover:text-white';
+
+                charts.station.data.labels = rawData.casualStations.map(s => s.name);
+                charts.station.data.datasets[0].data = rawData.casualStations.map(s => s.trips);
+                charts.station.data.datasets[0].backgroundColor = '#38bdf8';
+            } else {
+                btnMember.className = 'px-3 py-1 rounded-md transition font-medium bg-sky-600 text-white font-bold';
+                btnCasual.className = 'px-3 py-1 rounded-md transition font-medium text-slate-400 hover:text-white';
+
+                charts.station.data.labels = rawData.memberStations.map(s => s.name);
+                charts.station.data.datasets[0].data = rawData.memberStations.map(s => s.trips);
+                charts.station.data.datasets[0].backgroundColor = '#0284c7';
+            }
+            charts.station.update();
+        }
+
+        function resetFilters() {
+            document.getElementById('riderFilter').value = 'all';
+            document.getElementById('monthFilter').value = 'all';
+            updateDashboard();
+        }
+
+        function exportDataCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Month,Member Trips,Casual Trips\n";
+            rawData.months.forEach((m, idx) => {
+                csvContent += `${m},${rawData.memberMonthly[idx]},${rawData.casualMonthly[idx]}\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "cyclistic_trip_summary_2025.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
